@@ -12,3 +12,47 @@ export const SELL_PRICES: Record<FlowerType, number> = {
     cherry: 20,
 }
 export const BOUQUET_MIN = 3
+
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
+
+export const RARITY_COLORS: Record<Rarity, string> = {
+    common: '#9CA3AF',
+    uncommon: '#22C55E',
+    rare: '#3B82F6',
+    epic: '#A855F7',
+    legendary: '#F59E0B',
+}
+
+export const FLOWER_RARITY: Record<FlowerType, Rarity> = {
+    rose: 'rare',
+    tulip: 'common',
+    sunflower: 'uncommon',
+    daisy: 'common',
+    cherry: 'legendary',
+}
+
+export const RARITY_CHANCE: { rarity: Rarity; chance: number }[] = [
+    { rarity: 'common', chance: 0.5 },
+    { rarity: 'uncommon', chance: 0.25 },
+    { rarity: 'rare', chance: 0.15 },
+    { rarity: 'epic', chance: 0.08 },
+    { rarity: 'legendary', chance: 0.02 },
+]
+
+export function getRandomRarity(): Rarity {
+    const rand = Math.random()
+    let cumulative = 0
+    for (const { rarity, chance } of RARITY_CHANCE) {
+        cumulative += chance
+        if (rand <= cumulative) return rarity
+    }
+    return 'common'
+}
+
+export const RARITY_BONUS: Record<Rarity, number> = {
+    common: 1,
+    uncommon: 1.5,
+    rare: 2,
+    epic: 3,
+    legendary: 5,
+}

@@ -30,14 +30,15 @@ export default function PixelGarden() {
         clickCell,
         sellFlower,
         makeBouquet,
-        toggleBouquetModal
+        toggleBouquetModal,
+        toggleSellModal
     } = useGarden()
 
     const totalFlowers = Object.values(state.inventory).reduce((s, n) => s + n, 0)
     const latestBouquet = state.bouquets[state.bouquets.length - 1]
 
     return (
-        <section id="garden" className={`py-16 px-4 relative flex flex-col items-center w-full max-w-5xl mx-auto ${state.showBouquetModal ? 'z-[1001]' : 'z-20'}`}>
+        <section id="garden" className={`py-16 px-4 relative flex flex-col items-center w-full max-w-5xl mx-auto ${state.showBouquetModal || state.showSellModal ? 'z-[1001]' : 'z-20'}`}>
             <h2 className="text-3xl md:text-5xl text-center text-rose-300 mb-6 tracking-wide">
                 Meu Jardim de Flores
             </h2>
@@ -56,16 +57,15 @@ export default function PixelGarden() {
                     <span className="text-purple-300 flex items-center gap-1">
                         <BouquetIcon /> {state.bouquets.length} buquês
                     </span>
+                    <span className="text-emerald-300 text-xs">Dia {state.day}</span>
                 </div>
+            </div>
 
-                <div className="w-full h-8" />
-
+            <div className="garden-message-container min-h-[40px] w-full flex justify-center items-center mb-4">
                 {state.message && (
                     <p className="garden-message">{state.message}</p>
                 )}
             </div>
-
-            <div className="w-full h-8" />
 
             <div className="w-full max-w-3xl mb-4 flex items-center justify-center gap-2 flex-wrap">
                 {(Object.keys(TOOL_INFO) as Tool[]).map(tool => (
@@ -75,7 +75,7 @@ export default function PixelGarden() {
                             if (tool === 'bouquet') {
                                 makeBouquet()
                             } else if (tool === 'sell') {
-                                toggleBouquetModal()
+                                toggleSellModal()
                             } else {
                                 selectTool(tool)
                             }
@@ -136,44 +136,57 @@ export default function PixelGarden() {
                 <div className="garden-modal-overlay" onClick={toggleBouquetModal}>
                     <div className="garden-modal" onClick={e => e.stopPropagation()}>
                         <h3 className="text-xl text-rose-300 mb-4 text-center">
-                            {latestBouquet ? 'Seu Buquê!' : 'Vender Flores'}
+                            Seu Buquê!
                         </h3>
 
-                        {latestBouquet && (
-                            <div className="bouquet-display">
-                                {latestBouquet.map((f, i) => (
-                                    <div key={i} className="bouquet-flower">
-                                        {FLOWER_SPRITES[f].bloom}
-                                    </div>
-                                ))}
-                                <p className="text-rose-200/70 mt-3 text-sm text-center">
-                                    Um buquê feito com amor para Vitória
-                                </p>
-                            </div>
-                        )}
-
-                        {!latestBouquet && (
-                            <div className="sell-panel">
-                                {FLOWER_TYPES.map(flower => (
-                                    <div key={flower} className="sell-row">
-                                        <div className="sell-icon-wrapper">{FLOWER_SPRITES[flower].bloom}</div>
-                                        <span className="text-rose-200/70 flex-1 capitalize">{flower}</span>
-                                        <span className="text-rose-300">x{state.inventory[flower]}</span>
-                                        <button
-                                            className="sell-btn flex items-center gap-1"
-                                            disabled={state.inventory[flower] <= 0}
-                                            onClick={() => sellFlower(flower)}
-                                        >
-                                            Vender (+{SELL_PRICES[flower]} <CoinIcon />)
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        <div className="bouquet-display">
+                            {latestBouquet && latestBouquet.map((f, i) => (
+                                <div key={i} className="bouquet-flower">
+                                    {FLOWER_SPRITES[f].bloom}
+                                </div>
+                            ))}
+                            <p className="text-rose-200/70 mt-3 text-sm text-center">
+                                Um buquê feito com amor para Vitória
+                            </p>
+                        </div>
 
                         <button
                             className="garden-modal-close"
                             onClick={toggleBouquetModal}
+                        >
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {state.showSellModal && (
+                <div className="garden-modal-overlay" onClick={toggleSellModal}>
+                    <div className="garden-modal" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-xl text-rose-300 mb-4 text-center">
+                            Vender Flores
+                        </h3>
+
+                        <div className="sell-panel">
+                            {FLOWER_TYPES.map(flower => (
+                                <div key={flower} className="sell-row">
+                                    <div className="sell-icon-wrapper">{FLOWER_SPRITES[flower].bloom}</div>
+                                    <span className="text-rose-200/70 flex-1 capitalize">{flower}</span>
+                                    <span className="text-rose-300">x{state.inventory[flower]}</span>
+                                    <button
+                                        className="sell-btn flex items-center gap-1"
+                                        disabled={state.inventory[flower] <= 0}
+                                        onClick={() => sellFlower(flower)}
+                                    >
+                                        Vender (+{SELL_PRICES[flower]} <CoinIcon />)
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            className="garden-modal-close"
+                            onClick={toggleSellModal}
                         >
                             Fechar
                         </button>

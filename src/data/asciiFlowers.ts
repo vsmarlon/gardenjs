@@ -6,9 +6,9 @@ export const ASCII_FLOWERS: AsciiFlower[] = [
         name: 'Rosa',
         art: [
             "         _ _           ",
-            "       _(_ _)_         ",
+            "       _(_ _)__        ",
             "      (_(_ _  _)       ",
-            "       (_ _ _)_        ",
+            "       (_ _ _)_)        ",
             "         (_ _)         ",
             "           |           ",
             "         \\ | /         ",

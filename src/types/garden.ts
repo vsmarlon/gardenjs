@@ -1,3 +1,5 @@
+import { Rarity } from '../constants/garden'
+
 export type FlowerType = 'rose' | 'tulip' | 'sunflower' | 'daisy' | 'cherry'
 export type GrowthStage = 'empty' | 'seed' | 'sprout' | 'bloom'
 export type Tool = 'plant' | 'water' | 'harvest' | 'sell' | 'bouquet'
@@ -6,6 +8,9 @@ export interface CellState {
     stage: GrowthStage
     type: FlowerType | null
     wateredCount: number
+    rarity?: Rarity
+    hasButterfly?: boolean
+    hasWorm?: boolean
 }
 
 export interface GardenState {
@@ -15,7 +20,11 @@ export interface GardenState {
     selectedTool: Tool
     bouquets: FlowerType[][]
     showBouquetModal: boolean
+    showSellModal: boolean
     message: string
+    lastSaved: number
+    day: number
+    streak: number
 }
 
 export type GardenAction =
@@ -24,4 +33,6 @@ export type GardenAction =
     | { type: 'SELL_FLOWER'; flower: FlowerType }
     | { type: 'MAKE_BOUQUET' }
     | { type: 'TOGGLE_BOUQUET_MODAL' }
+    | { type: 'TOGGLE_SELL_MODAL' }
     | { type: 'CLEAR_MESSAGE' }
+    | { type: 'LOAD_STATE'; state: GardenState }
