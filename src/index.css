@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+/* ── Design Tokens ──────────────────────────────────── */
+:root {
+  --rose-dark: #8B0000;
+  --rose-medium: #C71585;
+  --rose-light: #FFB6C1;
+  --rose-pale: #FFF0F5;
+  --bg-deep: #0a0412;
+  --bg-mid: #150a1a;
+}
+
+/* ── Reset & Base ───────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Dancing Script', cursive;
+  background: linear-gradient(180deg,
+      var(--bg-deep) 0%,
+      var(--bg-mid) 25%,
+      #1a0a14 50%,
+      var(--bg-mid) 75%,
+      var(--bg-deep) 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--rose-light);
+}
+
+/* ── Typography ─────────────────────────────────────── */
+h1,
+h2,
+h3 {
+  font-family: 'Dancing Script', cursive;
+}
+
+p,
+span,
+button {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Petal Fall Animation ───────────────────────────── */
+@keyframes petal-fall {
+  0% {
+    transform: translateY(-5vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  90% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateY(105vh) translateX(var(--drift, 40px)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.petal-fall {
+  animation: petal-fall linear infinite;
+}
+
+/* ── Float Animation ────────────────────────────────── */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* ── Pulse Slow ─────────────────────────────────────── */
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* ── Hero Entrance ──────────────────────────────────── */
+@keyframes hero-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-entrance {
+  animation: hero-enter 1.2s ease-out;
+}
+
+/* ── Carousel Cards ─────────────────────────────────── */
+.carousel-card {
+  background: linear-gradient(135deg,
+      rgba(60, 10, 40, 0.4) 0%,
+      rgba(30, 10, 50, 0.4) 100%);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(199, 21, 133, 0.15);
+  transition: all 0.3s ease;
+}
+
+.carousel-card:hover {
+  border-color: rgba(199, 21, 133, 0.4);
+  box-shadow: 0 8px 32px rgba(199, 21, 133, 0.1);
+  transform: translateY(-4px);
+}
+
+/* ── Apology Card ───────────────────────────────────── */
+.apology-card {
+  background: linear-gradient(135deg,
+      rgba(60, 10, 40, 0.35) 0%,
+      rgba(40, 10, 60, 0.35) 100%);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid rgba(199, 21, 133, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ── ASCII Art ──────────────────────────────────────── */
+.ascii-flower {
+  white-space: pre;
+  font-family: 'Courier New', monospace;
+  line-height: 1.1;
+  text-shadow: 0 0 10px rgba(199, 21, 133, 0.3);
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ── Swiper Overrides ───────────────────────────────── */
+.swiper {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-pagination-bullet {
+  background: rgba(199, 21, 133, 0.4) !important;
+  width: 8px !important;
+  height: 8px !important;
+  transition: all 0.3s !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #C71585 !important;
+  width: 24px !important;
+  border-radius: 4px !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: rgba(199, 21, 133, 0.6) !important;
+  transition: color 0.3s !important;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  color: #FF69B4 !important;
+}
+
+/* ── Selection ──────────────────────────────────────── */
+::selection {
+  background: rgba(199, 21, 133, 0.3);
+  color: #fff;
+}
+
+/* ── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(199, 21, 133, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(199, 21, 133, 0.5);
+}
