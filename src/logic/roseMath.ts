@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export function generateRosePoints(factor: number = 6.5) {
+export function generateRosePoints(factor: number = 1.8) {
     const xLo = 0, xHi = 1, xCount = 20
     const thetaLo = -2 * Math.PI, thetaHi = 15 * Math.PI, thetaCount = 2000
 

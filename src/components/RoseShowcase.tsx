@@ -1,3 +1,5 @@
+import vitoriaImg from '../assets/bebe.jpg'
+
 export default function RoseShowcase() {
     return (
         <section className="py-20 px-4 relative z-20">
@@ -14,7 +16,7 @@ export default function RoseShowcase() {
 
                     <div className="relative">
                         <img
-                            src="public/bebe.jpg"
+                            src={vitoriaImg}
                             alt="Rosa para Vitória"
                             className="w-52 h-52 md:w-72 md:h-72 object-cover rounded-full border-4 border-rose-500/20 shadow-2xl relative z-10"
                         />

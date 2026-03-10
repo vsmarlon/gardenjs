@@ -10,7 +10,7 @@ export default function FlowerCarousel() {
     ]
 
     return (
-        <section className="py-20 px-4 relative z-20">
+        <section className="py-20 px-4 relative z-20 w-full max-w-7xl mx-auto overflow-hidden">
             <h2 className="text-3xl md:text-5xl text-center text-rose-300 mb-3 tracking-wide">
                 Galeria de Flores
             </h2>

@@ -7,7 +7,7 @@ import { generateRosePoints } from '../logic/roseMath'
 function RosePoints() {
     const pointsRef = useRef<THREE.Points>(null)
 
-    const { positions, colors } = useMemo(() => generateRosePoints(6.5), [])
+    const { positions, colors } = useMemo(() => generateRosePoints(), [])
 
     useFrame((state) => {
         if (pointsRef.current) {
@@ -45,7 +45,7 @@ function RosePoints() {
 
 export default function ThreeFlower() {
     return (
-        <div className="w-full h-[400px] md:h-[600px] relative">
+        <div className="w-full h-60 md:h-90 relative">
             <Canvas gl={{ antialias: true }}>
                 <PerspectiveCamera makeDefault position={[0, 2, 8]} />
                 <ambientLight intensity={1} />
