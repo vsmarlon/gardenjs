@@ -9,6 +9,13 @@ function RosePoints() {
 
     const { positions, colors } = useMemo(() => generateRosePoints(), [])
 
+    const geometry = useMemo(() => {
+        const geo = new THREE.BufferGeometry()
+        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+        return geo
+    }, [positions, colors])
+
     useFrame((state) => {
         if (pointsRef.current) {
             pointsRef.current.rotation.y = state.clock.elapsedTime * 0.3
@@ -16,21 +23,7 @@ function RosePoints() {
     })
 
     return (
-        <points ref={pointsRef}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={positions.length / 3}
-                    array={positions}
-                    itemSize={3}
-                />
-                <bufferAttribute
-                    attach="attributes-color"
-                    count={colors.length / 3}
-                    array={colors}
-                    itemSize={3}
-                />
-            </bufferGeometry>
+        <points ref={pointsRef} geometry={geometry}>
             <pointsMaterial
                 size={0.12}
                 vertexColors

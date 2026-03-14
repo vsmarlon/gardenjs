@@ -1,10 +1,10 @@
 import { useGarden } from '../hooks/useGarden'
 import { GrowthStage, Tool, FlowerType } from '../types/garden'
-import { FLOWER_TYPES, COLS, SELL_PRICES } from '../constants/garden'
+import { FLOWER_TYPES, COLS, SELL_PRICES, SHOP_ITEMS } from '../constants/garden'
 import '../styles/garden.css'
 import {
     SeedSprite, SproutSprite, RoseSprite, TulipSprite, SunflowerSprite, DaisySprite, CherrySprite,
-    PlantIcon, WaterIcon, ShovelIcon, SellIcon, BouquetIcon, CoinIcon
+    PlantIcon, WaterIcon, ShovelIcon, SellIcon, BouquetIcon, CoinIcon, ShopIcon
 } from './FlowerSprites'
 
 const FLOWER_SPRITES: Record<FlowerType, Record<GrowthStage, React.ReactNode>> = {
@@ -31,14 +31,16 @@ export default function PixelGarden() {
         sellFlower,
         makeBouquet,
         toggleBouquetModal,
-        toggleSellModal
+        toggleSellModal,
+        toggleShopModal,
+        buyItem
     } = useGarden()
 
     const totalFlowers = Object.values(state.inventory).reduce((s, n) => s + n, 0)
     const latestBouquet = state.bouquets[state.bouquets.length - 1]
 
     return (
-        <section id="garden" className={`py-16 px-4 relative flex flex-col items-center w-full max-w-5xl mx-auto ${state.showBouquetModal || state.showSellModal ? 'z-[1001]' : 'z-20'}`}>
+        <section id="garden" className={`py-16 px-4 relative flex flex-col items-center w-full max-w-5xl mx-auto ${state.showBouquetModal || state.showSellModal || state.showShopModal ? 'z-[1001]' : 'z-20'}`}>
             <h2 className="text-3xl md:text-5xl text-center text-rose-300 mb-6 tracking-wide">
                 Meu Jardim de Flores
             </h2>
@@ -47,7 +49,7 @@ export default function PixelGarden() {
             </p>
 
             <div className="w-full max-w-3xl mb-4 flex items-center justify-center gap-4 flex-wrap">
-                <div className="garden-status-bar">
+                <div className="garden-status-bar items-center">
                     <span className="text-yellow-300 font-bold flex items-center gap-1">
                         <CoinIcon /> {state.coins}
                     </span>
@@ -57,13 +59,19 @@ export default function PixelGarden() {
                     <span className="text-purple-300 flex items-center gap-1">
                         <BouquetIcon /> {state.bouquets.length} buquês
                     </span>
-                    <span className="text-emerald-300 text-xs">Dia {state.day}</span>
+                    <span className="text-emerald-300 text-xs self-center">Dia {state.day}</span>
+                    <button
+                        onClick={toggleShopModal}
+                        className="ml-2 px-3 py-1 bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/30 rounded-full text-amber-300 text-xs flex items-center gap-1 transition-all"
+                    >
+                        <ShopIcon /> Loja
+                    </button>
                 </div>
             </div>
 
-            <div className="garden-message-container min-h-[40px] w-full flex justify-center items-center mb-4">
+            <div className="garden-message-container min-h-[40px] w-full flex justify-center items-center mb-6">
                 {state.message && (
-                    <p className="garden-message">{state.message}</p>
+                    <p className="garden-message py-2 px-4">{state.message}</p>
                 )}
             </div>
 
@@ -187,6 +195,41 @@ export default function PixelGarden() {
                         <button
                             className="garden-modal-close"
                             onClick={toggleSellModal}
+                        >
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {state.showShopModal && (
+                <div className="garden-modal-overlay" onClick={toggleShopModal}>
+                    <div className="garden-modal" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-xl text-amber-300 mb-4 text-center">
+                            🏪 Loja
+                        </h3>
+
+                        <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                            {SHOP_ITEMS.map(item => (
+                                <div key={item.id} className="flex items-center justify-between bg-amber-900/20 p-3 rounded-lg border border-amber-500/20">
+                                    <div>
+                                        <p className="text-rose-200 font-medium">{item.name}</p>
+                                        <p className="text-rose-200/50 text-xs">{item.description}</p>
+                                    </div>
+                                    <button
+                                        className="sell-btn flex items-center gap-1 bg-amber-600/30 hover:bg-amber-600/50 border-amber-500/30"
+                                        disabled={state.coins < item.price}
+                                        onClick={() => buyItem(item.id)}
+                                    >
+                                        <CoinIcon /> {item.price}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            className="garden-modal-close mt-4"
+                            onClick={toggleShopModal}
                         >
                             Fechar
                         </button>

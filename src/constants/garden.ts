@@ -56,3 +56,20 @@ export const RARITY_BONUS: Record<Rarity, number> = {
     epic: 3,
     legendary: 5,
 }
+
+export interface ShopItem {
+    id: string
+    name: string
+    description: string
+    price: number
+    type: 'seed_pack' | 'fertilizer' | 'charm' | 'expand'
+    effect: number
+}
+
+export const SHOP_ITEMS: ShopItem[] = [
+    { id: 'seeds_small', name: 'Pacote de Sementes', description: '5 sementes aleatórias', price: 20, type: 'seed_pack', effect: 5 },
+    { id: 'seeds_large', name: 'Grande Pacote', description: '15 sementes aleatórias', price: 50, type: 'seed_pack', effect: 15 },
+    { id: 'fertilizer', name: 'Fertilizante', description: ' Faz todas as flores crescerem +1 estágio', price: 30, type: 'fertilizer', effect: 1 },
+    { id: 'charm_love', name: 'Amuleto do Amor', description: '+50% chance de raridade épica/legendária (1 dia)', price: 100, type: 'charm', effect: 1 },
+    { id: 'water_boost', name: 'Água Mágica', description: 'Rega todas as plantas de uma vez', price: 15, type: 'fertilizer', effect: 999 },
+]

@@ -21,10 +21,12 @@ export interface GardenState {
     bouquets: FlowerType[][]
     showBouquetModal: boolean
     showSellModal: boolean
+    showShopModal: boolean
     message: string
     lastSaved: number
     day: number
     streak: number
+    activeCharm: boolean
 }
 
 export type GardenAction =
@@ -34,5 +36,9 @@ export type GardenAction =
     | { type: 'MAKE_BOUQUET' }
     | { type: 'TOGGLE_BOUQUET_MODAL' }
     | { type: 'TOGGLE_SELL_MODAL' }
+    | { type: 'TOGGLE_SHOP_MODAL' }
+    | { type: 'BUY_ITEM'; itemId: string }
+    | { type: 'USE_FERTILIZER' }
+    | { type: 'USE_WATER_BOOST' }
     | { type: 'CLEAR_MESSAGE' }
     | { type: 'LOAD_STATE'; state: GardenState }

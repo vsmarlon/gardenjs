@@ -1,5 +1,5 @@
 import { GardenState, GardenAction, CellState, GrowthStage, FlowerType } from '../types/garden'
-import { ROWS, COLS, FLOWER_TYPES, PLANT_COST, SELL_PRICES, BOUQUET_MIN, getRandomRarity, RARITY_BONUS } from '../constants/garden'
+import { ROWS, COLS, FLOWER_TYPES, PLANT_COST, SELL_PRICES, BOUQUET_MIN, getRandomRarity, RARITY_BONUS, SHOP_ITEMS } from '../constants/garden'
 
 export function createEmptyGrid(): CellState[][] {
     return Array.from({ length: ROWS }, () =>
@@ -145,6 +145,77 @@ export function gardenReducer(state: GardenState, action: GardenAction): GardenS
         case 'TOGGLE_SELL_MODAL':
             return { ...state, showSellModal: !state.showSellModal }
 
+        case 'TOGGLE_SHOP_MODAL':
+            return { ...state, showShopModal: !state.showShopModal }
+
+        case 'BUY_ITEM': {
+            const item = SHOP_ITEMS.find(i => i.id === action.itemId)
+            if (!item) return { ...state, message: 'Item não encontrado!' }
+            if (state.coins < item.price) return { ...state, message: 'Moedas insuficientes!' }
+
+            const newCoins = state.coins - item.price
+
+            if (item.type === 'seed_pack') {
+                const newInv = { ...state.inventory }
+                for (let i = 0; i < item.effect; i++) {
+                    const flower = randomFlower()
+                    newInv[flower]++
+                }
+                return {
+                    ...state,
+                    coins: newCoins,
+                    inventory: newInv,
+                    message: `Comprou ${item.effect} sementes!`,
+                }
+            }
+
+            if (item.type === 'charm') {
+                return {
+                    ...state,
+                    coins: newCoins,
+                    activeCharm: true,
+                    message: 'Amuleto ativado! +50% chance de raridade!',
+                }
+            }
+
+            if (item.id === 'water_boost') {
+                const newGrid = state.grid.map(row => row.map(cell => {
+                    if (cell.stage !== 'empty' && cell.stage !== 'bloom') {
+                        let newStage: GrowthStage = 'sprout'
+                        if (cell.stage === 'sprout') newStage = 'bloom'
+                        return { ...cell, stage: newStage, wateredCount: 999 }
+                    }
+                    return cell
+                }))
+                return {
+                    ...state,
+                    coins: newCoins,
+                    grid: newGrid,
+                    message: 'Água mágica usou em todas as plantas!',
+                }
+            }
+
+            if (item.id === 'fertilizer') {
+                const newGrid = state.grid.map(row => row.map(cell => {
+                    if (cell.stage !== 'empty' && cell.stage !== 'bloom') {
+                        let newStage = cell.stage as GrowthStage
+                        if (cell.stage === 'seed') newStage = 'sprout'
+                        else if (cell.stage === 'sprout') newStage = 'bloom'
+                        return { ...cell, stage: newStage, wateredCount: cell.wateredCount + 2 }
+                    }
+                    return cell
+                }))
+                return {
+                    ...state,
+                    coins: newCoins,
+                    grid: newGrid,
+                    message: 'Fertilizante aplicado!',
+                }
+            }
+
+            return { ...state, coins: newCoins }
+        }
+
         case 'LOAD_STATE':
             return { ...action.state }
 
@@ -164,8 +235,10 @@ export const initialState: GardenState = {
     bouquets: [],
     showBouquetModal: false,
     showSellModal: false,
+    showShopModal: false,
     message: '',
     lastSaved: Date.now(),
     day: 1,
     streak: 0,
+    activeCharm: false,
 }

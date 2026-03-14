@@ -12,7 +12,7 @@ export default function RoseShowcase() {
 
             <div className="flex justify-center">
                 <div className="relative group cursor-pointer">
-                    <div className="absolute -inset-4 bg-gradient-to-r from-rose-500/30 to-pink-500/30 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute -inset-4 bg-linear-to-r from-rose-500/30 to-pink-500/30 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                     <div className="relative">
                         <img

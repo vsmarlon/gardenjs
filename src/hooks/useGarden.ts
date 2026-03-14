@@ -55,6 +55,7 @@ function saveState(state: GardenState) {
             lastSaved: Date.now(),
             showBouquetModal: false,
             showSellModal: false,
+            showShopModal: false,
             message: '',
         }))
     } catch (e) {
@@ -102,6 +103,14 @@ export function useGarden() {
         dispatch({ type: 'TOGGLE_SELL_MODAL' })
     }, [])
 
+    const toggleShopModal = useCallback(() => {
+        dispatch({ type: 'TOGGLE_SHOP_MODAL' })
+    }, [])
+
+    const buyItem = useCallback((itemId: string) => {
+        dispatch({ type: 'BUY_ITEM', itemId })
+    }, [])
+
     const clearMessage = useCallback(() => {
         dispatch({ type: 'CLEAR_MESSAGE' })
     }, [])
@@ -114,6 +123,8 @@ export function useGarden() {
         makeBouquet,
         toggleBouquetModal,
         toggleSellModal,
+        toggleShopModal,
+        buyItem,
         clearMessage,
     }
 }
